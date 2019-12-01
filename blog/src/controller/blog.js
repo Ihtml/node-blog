@@ -20,6 +20,15 @@ const getList = (author, keyword) => {
     ]
 }
 
+const getDetail = (id) => {
+    console.log('id: ',id);
+    
+    return {
+        id: id,
+        content: `id为：${id}的文章内容`
+    }
+}
 module.exports = {
-    getList
+    getList,
+    getDetail
 }
