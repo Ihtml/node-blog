@@ -1,3 +1,6 @@
+const { getList } = require('../controller/blog')
+const {SuccessModel, ErrorModel} = require('../model/resMode')
+
 const handleBlogRouter = (req, res) => {
     const method = req.method // GET POST
 
@@ -5,9 +8,11 @@ const handleBlogRouter = (req, res) => {
     
     // 博客列表
     if (method === 'GET' && req.path === '/api/blog/list') {
-        return {
-            msg: '博客列表'
-        }
+        const author = req.query.author || ''
+        const keyword = req.query.keyword || ''
+        const listData = getList(author, keyword)
+
+        return new SuccessModel(listData, 'get list success') 
     }
 }
 
