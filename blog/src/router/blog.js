@@ -12,7 +12,7 @@ const {SuccessModel, ErrorModel} = require('../model/resMode')
 
 const handleBlogRouter = (req, res) => {
     const method = req.method // GET POST
-    const id = req.query.id || ''
+    const id = req.query.id || '' // 拿到参数带的id
     console.log(req.path);
     
     // 获取博客列表
@@ -43,6 +43,16 @@ const handleBlogRouter = (req, res) => {
             return new SuccessModel(data)
         } else {
             return new ErrorModel('更新博客失败')
+        }
+    }
+
+    //  删除博客
+    if (method === 'POST' && req.path === '/api/blog/del') {
+        const result = delBlog(id)
+        if (result) {
+            return new SuccessModel(result)
+        } else {
+            return new ErrorModel('删除博客失败')
         }
     }
 }

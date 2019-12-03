@@ -37,12 +37,17 @@ const newBlog = (blogDaya = {}) => {
 
 const updateBlog = (id, blogDaya = {}) => {
     console.log('id', id);
-    return false
+    return true
 }
 
+const delBlog = (id) => {
+    console.log('id', id);
+    return true
+}
 module.exports = {
     getList,
     getDetail,
     newBlog,
-    updateBlog
+    updateBlog,
+    delBlog
 }
