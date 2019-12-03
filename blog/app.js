@@ -20,7 +20,7 @@ const getPostData = (req) => {
             return
         }
         // 接收POST数据
-        const result = Buffer.from([])
+        let result = Buffer.from([])
         // 当接收到post数据的时候会触发‘data’事件
         req.on('data', chunk => {
             result = Buffer.concat([result, chunk])// chunk本身是二进制的格式,要转字符串

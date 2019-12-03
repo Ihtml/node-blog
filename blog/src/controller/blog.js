@@ -28,7 +28,21 @@ const getDetail = (id) => {
         content: `id为：${id}的文章内容`
     }
 }
+
+const newBlog = (blogDaya = {}) => {
+    return {
+        id: 3
+    }
+}
+
+const updateBlog = (id, blogDaya = {}) => {
+    console.log('id', id);
+    return false
+}
+
 module.exports = {
     getList,
-    getDetail
+    getDetail,
+    newBlog,
+    updateBlog
 }
