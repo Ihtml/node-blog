@@ -18,10 +18,11 @@ const getList = (author, keyword) => {
 const getDetail = (id) => {
     console.log('id: ',id);
     
-    return {
-        id: id,
-        content: `id为：${id}的文章内容`
-    }
+    let sql = `select * from blogs where id='${id}' ` 
+
+    return exec(sql).then((rows) => {
+        return rows[0]
+    })
 }
 
 const newBlog = (blogDaya = {}) => {
