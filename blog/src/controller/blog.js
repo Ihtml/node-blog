@@ -25,10 +25,24 @@ const getDetail = (id) => {
     })
 }
 
-const newBlog = (blogDaya = {}) => {
-    return {
-        id: 3
-    }
+const newBlog = (blogData = {}) => {
+    // blogData 是一个博客对象，包含title content author属性
+    const title = blogData.title
+    const content = blogData.content
+    const author = blogData.author
+    const createtime = Date.now()
+
+    const sql = `
+    INSERT INTO blogs (title, content, createtime, author) 
+    VALUES('${title}', '${content}', '${createtime}', '${author}');
+    `
+
+    return exec(sql).then(insertData => {
+        // console.log(insertData);
+        return {
+            id: insertData.insertId
+        }
+    })
 }
 
 const updateBlog = (id, blogDaya = {}) => {

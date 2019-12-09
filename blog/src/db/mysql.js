@@ -15,7 +15,17 @@ function exec(sql) {
                 reject(err)
                 return
             }
-            resolve(result)
+            resolve(result)  // 执行sql语句后返回的信息
+            // {
+            //     fieldCount: 0,
+            //     affectedRows: 1,  // 影响行数
+            //     insertId: 3,   // id信息
+            //     serverStatus: 2,
+            //     warningCount: 0,
+            //     message: '',
+            //     protocol41: true,
+            //     changedRows: 0 // update的行数
+            // }
         })
     })
     return promise
