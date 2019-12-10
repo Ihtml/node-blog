@@ -1,6 +1,6 @@
 const {exec} = require('../db/mysql')
 
-const loginCheck = (username, password) => {
+const login = (username, password) => {
     // use fake data
     // if (username === 'IFE' && password === '123') {
     //     return true
@@ -18,4 +18,4 @@ const loginCheck = (username, password) => {
     })
 }
 
-module.exports = {loginCheck}
+module.exports = {login}
