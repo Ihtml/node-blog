@@ -53,18 +53,6 @@ const getCookieExpires = () => {
 // 解析 session
 const SESSION_DATA = {}
 let needSetCookie = false
-let userId = req.cookie.userid
-if (userId) {
-    if (!SESSION_DATA[userId]) {
-        SESSION_DATA[userId] = {}
-    }
-} else { // 如果cookie中没有userid,就创建一个userid返回给浏览器
-    needSetCookie = true
-    userId = `${Date.now()}_${Math.random()}`
-    SESSION_DATA[userId] = {}
-}
-req.session = SESSION_DATA[userId]
-
 
 const serverHandle = (req, res) => {
     res.setHeader('Content-type', 'application/json')
@@ -89,6 +77,18 @@ const serverHandle = (req, res) => {
         req.cookie[key] = val
     })
     console.log('cookie is:', req.cookie);
+
+    let userId = req.cookie.userid
+    if (userId) {
+        if (!SESSION_DATA[userId]) {
+            SESSION_DATA[userId] = {}
+        }
+    } else { // 如果cookie中没有userid,就创建一个userid返回给浏览器
+        needSetCookie = true
+        userId = `${Date.now()}_${Math.random()}`
+        SESSION_DATA[userId] = {}
+    }
+    req.session = SESSION_DATA[userId]
     
     // 处理post data
     getPostData(req).then(postData => {
