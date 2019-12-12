@@ -6,7 +6,7 @@ const handleUserRouter = require('./src/router/user')
 /**
  * 如果是POST请求，并且是json的数据，则返回JSON对象
  * @param {*} req 
- * @return promise
+ * @return promise 
  */
 const getPostData = (req) => {
     const promise = new Promise((resolve, reject) => {
@@ -50,6 +50,22 @@ const getCookieExpires = () => {
     return d.toGMTString()
 }
 
+// 解析 session
+const SESSION_DATA = {}
+let needSetCookie = false
+let userId = req.cookie.userid
+if (userId) {
+    if (!SESSION_DATA[userId]) {
+        SESSION_DATA[userId] = {}
+    }
+} else { // 如果cookie中没有userid,就创建一个userid返回给浏览器
+    needSetCookie = true
+    userId = `${Date.now()}_${Math.random()}`
+    SESSION_DATA[userId] = {}
+}
+req.session = SESSION_DATA[userId]
+
+
 const serverHandle = (req, res) => {
     res.setHeader('Content-type', 'application/json')
 
@@ -87,6 +103,9 @@ const serverHandle = (req, res) => {
         const blogData = handleBlogRouter(req, res)  // 返回promise
         if (blogData) {
             blogData.then(blogData => {
+                if (needSetCookie) {
+                    res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
+                }
                 res.end(JSON.stringify(blogData))
             })
             return
@@ -101,6 +120,9 @@ const serverHandle = (req, res) => {
         const userResult= handleUserRouter(req, res)
         if (userResult) {
             userResult.then(userData => {
+                if (needSetCookie) {
+                    res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
+                }
                 res.end(JSON.stringify(userData))
             })
             return
