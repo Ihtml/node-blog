@@ -85,6 +85,7 @@ const serverHandle = (req, res) => {
         // 如果cookie中没有userid,就创建一个userid返回给浏览器
         userId = `${Date.now()}_${Math.random()}`
         set(userId, {})
+        req.session = {}
     } 
     req.sessionId = userId
     
@@ -95,7 +96,7 @@ const serverHandle = (req, res) => {
             set(req.sessionId, {})
             req.session = {}
         } else {
-            req.sessionId = sessionData
+            req.session = sessionData
         }
         console.log('req.session ', req.session);
         return getPostData(req)

@@ -7,11 +7,18 @@ redisClient.on('error', err => {
     console.log(err);
 })
 
-function set(key, val){
+/**
+ * redis set
+ * @param {string} key 
+ * @param {string|Object} val 
+ * @param {number} timeout 过期时间，单位 s ，默认 7day
+ */
+function set(key, val, timeout= 60*60*27*7){
     if (typeof val === 'object') {
         val = JSON.stringify(val)
     }
     redisClient.set(key, val, redis.print)
+    redisClient.expire(key, timeout)
 }
 
 function get(key, val){
