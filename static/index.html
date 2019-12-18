@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>博客详情页</title>
+    <title>首页</title>
     <style type="text/css">
         body {
             margin: 0 20px;
@@ -14,27 +14,25 @@
             text-decoration-line: none;
         }
 
-        .title {
+        .title-wrapper {
+            padding: 15px 0;
+            border-top: 1px solid #ccc;
+        }
+        .title-wrapper .title {
             font-size: 20px;
             font-weight: bold;
         }
-        .info-container span,
-        .info-container a {
+        .title-wrapper .info-wrapper span,
+        .title-wrapper .info-wrapper a {
             font-size: 14px;
             color: #999;
         }
-        .content-wrapper {
-            margin-top: 20px;
-            border-top: 1px solid #ccc;
-        }
+
     </style>
 </head>
 <body>
-    <h1 id="title" class="title"></h1>
-    <div id="info-container" class="info-container"></div>
-    <div class="content-wrapper">
-        <p id="content"></p>
-    </div>
+    <h1>博客首页</h1>
+    <div id="blog-container"></div>
 
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
@@ -65,29 +63,39 @@
         }
 
         // 获取 dom 元素
-        const $title = $('#title')
-        const $infoContainer = $('#info-container')
-        const $content = $('#content')
+        const $container = $('#blog-container')
 
-        // 获取数据
+        // 拼接接口 url
+        let url = '/api/blog/list'
         const urlParams = getUrlParams()
-        const url = '/api/blog/detail?id=' + urlParams.id
-        get(url).then(res => {
+        if (urlParams.author) {
+            url += '?author=' + urlParams.author
+        }
+
+        // 加载数据
+        get(url).then((res) => {
             if (res.status !== 200) {
                 alert('数据错误')
                 return
             }
 
-            // 显示数据
-            const data = res.data || {}
-            $title.text(data.title)
-            $content.text(data.content)
-            $infoContainer.append($(`
-                <span>
-                    <a href="/index.html?author=${data.author}">${data.author}</a>
-                </span>
-                <span>${getFormatDate(data.createtime)}</span>
-            `))
+            // 遍历博客列表，并显示
+            const data = res.data || []
+            data.forEach(item => {
+                $container.append($(`
+                    <div class="title-wrapper">
+                        <p class="title">
+                        <a href="/detail.html?id=${item.id}" target="_blank">${item.title}</a>
+                        </p>
+                        <div class="info-wrapper">
+                            <span>
+                                <a href="/index.html?author=${item.author}">${item.author}</a>
+                            </span>
+                            <span>${getFormatDate(item.createtime)}</span>
+                        </div>
+                    </div>
+                `))
+            })
         })
     </script>
 </body>

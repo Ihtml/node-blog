@@ -7,7 +7,7 @@ if (env === 'dev') {
     MYSQL_CONF = {
         host: 'localhost',
         user: 'root',
-        password: 'yourpassword',
+        password: 'usemysql',
         port: '3306',
         database: 'nodeblog'  // 相当于 use nodeblog
     }
