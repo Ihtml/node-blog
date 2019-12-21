@@ -2,6 +2,7 @@ const queryString = require('querystring')
 const {get, set} = require('./src/db/redis')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
+const {access} = require('./src/utils/log')
 
 // 处理POST data
 /**
@@ -53,6 +54,11 @@ const getCookieExpires = () => {
 
 // 解析 session
 const serverHandle = (req, res) => {
+    console.log(process.env.NODE_ENV);
+    
+    // 记录访问日志
+    access(`${new Date} -- ${process.env.NODE_ENV} -- ${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
+
     res.setHeader('Content-type', 'application/json')
 
     // 获取 path
