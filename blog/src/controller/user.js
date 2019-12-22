@@ -1,4 +1,4 @@
-const {exec} = require('../db/mysql')
+const {exec, escape} = require('../db/mysql')
 
 const login = (username, password) => {
     // use fake data
@@ -6,11 +6,14 @@ const login = (username, password) => {
     //     return true
     // }
     // return false
+    username = escape(username)
+    password = escape(password)
     const sql = `
         select username, realname from users
-        where username='${username}' and password='${password}'
+        where username=${username} and password=${password}
     `
     console.log(username, password);
+    console.log('sql is ', sql);
     
     return exec(sql).then(rows => {
         console.log('rows: ', rows);

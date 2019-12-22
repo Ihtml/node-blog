@@ -1,11 +1,13 @@
-const {exec} = require('../db/mysql')
+const {exec, escape} = require('../db/mysql')
 
 const getList = (author, keyword) => {
     // 先返回格式正确的假数据
     console.log(author, keyword);
+    author = escape(author)
+    keyword = escape(keyword)
     let sql = `select * from blogs where 1=1 ` // 1=1 用来占位
     if (author) {
-        sql += `and author = '${author}' `
+        sql += `and author = ${author} `
     }
     if (keyword) {
         sql += `and title like '%${keyword}%' `
@@ -27,14 +29,14 @@ const getDetail = (id) => {
 
 const newBlog = (blogData = {}) => {
     // blogData 是一个博客对象，包含title content author属性
-    const title = blogData.title
-    const content = blogData.content
+    const title = escape(blogData.title)
+    const content = escape(blogData.content)
     const author = blogData.author
     const createtime = Date.now()
 
     const sql = `
     INSERT INTO blogs (title, content, createtime, author) 
-    VALUES('${title}', '${content}', '${createtime}', '${author}');
+    VALUES(${title}, ${content}, '${createtime}', '${author}');
     `
 
     return exec(sql).then(insertData => {
