@@ -6,8 +6,8 @@ const login = (username, password) => {
     //     return true
     // }
     // return false
-    username = escape(username)
-    password = escape(password)
+    username = xss(escape(username))
+    password = xss(escape(password))
     const sql = `
         select username, realname from users
         where username=${username} and password=${password}
