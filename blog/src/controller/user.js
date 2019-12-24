@@ -1,4 +1,6 @@
 const {exec, escape} = require('../db/mysql')
+const {genPassword} = require('../utils/crypto')
+const xss = require('xss')
 
 const login = (username, password) => {
     // use fake data
@@ -7,7 +9,11 @@ const login = (username, password) => {
     // }
     // return false
     username = xss(escape(username))
+
+    // 生成加密密码
+    password = genPassword(password)
     password = xss(escape(password))
+
     const sql = `
         select username, realname from users
         where username=${username} and password=${password}
