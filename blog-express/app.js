@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan'); // 生成日志
 const session = require('express-session')
@@ -17,8 +18,21 @@ var app = express(); // 每次客户端访问生成一个实例
 // view engine setup 视图引擎
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  app.use(logger('dev', {  
+    stream: process.stdout
+  }));
+}else {
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'
+  })
+  app.use(logger('combined', {
+    stream: writeStream
+  }));
+}
 
-app.use(logger('dev'));
 app.use(express.json()); // 将POST过来的JSON格式的数据，放到req.body中
 app.use(express.urlencoded({ extended: false })); // 解析url格式的数据
 app.use(cookieParser()); // 处理后 req.cookies就可以访问cookie
