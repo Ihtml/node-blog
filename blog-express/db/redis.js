@@ -43,7 +43,4 @@ function get(key, val){
      return promise
 }
 
-module.exports = {
-    set,
-    get
-}
+module.exports = redisClient

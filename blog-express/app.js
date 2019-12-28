@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan'); // 生成日志
 const session = require('express-session')
+const RedisStore  = require('connect-redis')(session)
+const redisClient = require('./db/redis')
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
@@ -22,13 +24,17 @@ app.use(express.urlencoded({ extended: false })); // 解析url格式的数据
 app.use(cookieParser()); // 处理后 req.cookies就可以访问cookie
 // app.use(express.static(path.join(__dirname, 'public'))); // 提供静态资源服务
 
+const sessionStore = new RedisStore({
+  client: redisClient
+})
 app.use(session({
   secret: 'abc123_QWE!@#', // 密钥
   cookie: {
     // path: '/', // 默认配置
     // httpOnly: true, // 默认配置
     maxAge: 24 * 60 * 60 * 1000 // 单位ms
-  }
+  },
+  store: sessionStore
 }))
 // 注册路由
 // app.use('/', indexRouter);
