@@ -5,6 +5,8 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -24,6 +26,21 @@ app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
   extension: 'pug'
+}))
+
+app.keys = ['abc123_QWE!@#'] // session加密
+app.use(session({
+  // 配置cookie
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24*60*60*1000  // 单位毫秒
+  },
+  // 配置Redis
+  store: redisStore({
+    all: '127.0.0.1:6379', // 先写死成本地
+
+  })
 }))
 
 // logger
