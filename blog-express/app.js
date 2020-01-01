@@ -20,7 +20,7 @@ var app = express(); // 每次客户端访问生成一个实例
 // app.set('view engine', 'jade');
 const ENV = process.env.NODE_ENV
 if (ENV !== 'production') {
-  app.use(logger('dev', {  
+  app.use(logger('dev', {
     stream: process.stdout
   }));
 }else {
@@ -50,11 +50,28 @@ app.use(session({
   },
   store: sessionStore
 }))
+
+const logFileName = path.join(__dirname, 'logs', 'error.log')
+const writeStream = fs.createWriteStream(logFileName, {
+  flags: 'a'
+})
+
+// 自定义token
+logger.token('errmsg', (err, req, res, next) => {
+  return 'test 112233'
+})
+// 自定义format
+logger.format('errlog', '[errlog] :errmsg')
+
 // 注册路由
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/api/blog', blogRouter);
 app.use('/api/user', userRouter);
+
+// app.use(logger('errlog', {
+//   stream: writeStream
+// }));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -66,7 +83,10 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'dev' ? err : {}; // 如果是开发坏境就显示err
-
+  console.log(233333333);
+  logger('errlog', {
+    stream: writeStream
+  })
   // render the error page
   res.status(err.status || 500);
   res.render('error');
