@@ -7,6 +7,9 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
+const path = require('path')
+const fs = require('fs')
+const morgan = require('koa-morgan')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -29,6 +32,21 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
+
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境 / 测试环境
+  app.use(morgan('dev'));
+} else {
+  // 线上环境
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'
+  })
+  app.use(morgan('combined', {
+    stream: writeStream
+  }));
+}
 
 app.keys = ['abc123_QWE!@#'] // session加密
 app.use(session({
