@@ -7,7 +7,7 @@ if (env === 'dev') {
     MYSQL_CONF = {
         host: 'localhost',
         user: 'root',
-        password: 'usemysql',
+        password: 'Mysql_password',
         port: '3306',
         database: 'nodeblog'  // 相当于 use nodeblog
     }
@@ -22,9 +22,9 @@ if (env === 'production') {
     MYSQL_CONF = {
         host: 'localhost',
         user: 'root',
-        password: 'usemysql',
+        password: 'Mysql_password',
         port: '3306',
-        database: 'nodeblog'
+        database: 'myblog'
     }
 
     REDIS_CONF = {
