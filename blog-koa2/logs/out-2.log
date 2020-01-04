@@ -1,0 +1,4 @@
+2020-01-04 16:35:55:   <-- GET /api/blog/detail?id=2
+2020-01-04 16:35:55: id:  2
+2020-01-04 16:35:55: logger 日志 GET /api/blog/detail?id=2 - 5ms
+2020-01-04 16:35:55:   --> GET /api/blog/detail?id=2 200 17ms 114b

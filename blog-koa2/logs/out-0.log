@@ -1,0 +1,5 @@
+2020-01-04 16:35:02:   <-- GET /
+2020-01-04 16:35:03: logger 日志 GET / - 373ms
+2020-01-04 16:35:03:   --> GET / 200 383ms 185b
+2020-01-04 16:35:03:   <-- GET /stylesheets/style.css
+2020-01-04 16:35:03:   --> GET /stylesheets/style.css 200 4ms 111b
